@@ -38,6 +38,8 @@
     <a class="nav-link" href="#" id="nav-all">Hack or Snooze</a>
   </div>
   <div class="nav-right">
+    <a class="nav-link hidden" href="#" id="nav-favorites">favorites</a>
+    <a class="nav-link hidden" href="#" id="nav-submit">submit</a>
     <a class="nav-link" href="#" id="nav-login">login/signup</a>
     <a class="nav-link" href="#" id="nav-user-profile"></a>
     <a class="hidden" id="nav-logout" href="#"><small>(logout)</small></a>
@@ -53,6 +55,29 @@
   <!-- List of all stories -->
   <ol id="all-stories-list" class="stories-list"></ol>
 
+</section>
+
+<section class="container">
+  <form id="story-form" class="hidden">
+    <h4>Submit a Story</h4>
+
+    <div>
+      <label for="story-title">title</label>
+      <input id="story-title" name="title" required>
+    </div>
+
+    <div>
+      <label for="story-author">author</label>
+      <input id="story-author" name="author" required>
+    </div>
+
+    <div>
+      <label for="story-url">url</label>
+      <input id="story-url" name="url" type="url" required>
+    </div>
+
+    <button type="submit">submit</button>
+  </form>
 </section>
 
 <!-- Login and signup forms -->

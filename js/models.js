@@ -1,6 +1,7 @@
 "use strict";
 
-const BASE_URL = "https://hack-or-snooze-v3.herokuapp.com";
+const BASE_URL = "https://hack-or-snooze.herokuapp.com";
+;
 
 /******************************************************************************
  * Story: a single story in the system
@@ -147,6 +148,31 @@ class User {
       response.data.token
     );
   }
+
+  isFavorite(story) {
+    return this.favorites.some(s => s.storyId === story.storyId);
+  }
+
+  async addFavorite(story) {
+    await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+      method: "POST",
+      data: { token: this.loginToken },
+    });
+
+    this.favorites.push(story);
+  }
+
+  async removeFavorite(story) {
+    await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+      method: "DELETE",
+      data: { token: this.loginToken },
+    });
+
+    this.favorites = this.favorites.filter(s => s.storyId !== story.storyId);
+  }
+
 
   /** Login in user with API, make User instance & return it.
 

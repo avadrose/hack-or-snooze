@@ -6,10 +6,14 @@ let storyList;
 /** Get and show stories when site first loads. */
 
 async function getAndShowStoriesOnStart() {
-  storyList = await StoryList.getStories();
-  $storiesLoadingMsg.remove();
-
-  putStoriesOnPage();
+  try{
+    storyList = await StoryList.getStories();
+    $storiesLoadingMsg.remove();
+    putStoriesOnPage();
+  } catch (err) {
+    console.error("Failed to load stories:", err);
+    $("#stories-loading-msg").text("Error loading stories — check console.");
+  }
 }
 
 /**
@@ -21,11 +25,16 @@ async function getAndShowStoriesOnStart() {
 
 function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
+  const showStar = Boolean(currentUser);
+  const isFav = currentUser && currentUser.isFavorite(story);
+  const starType = isFav ? "fas" : "far";
+
 
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
-        <a href="${story.url}" target="a_blank" class="story-link">
+        ${showStar ? `<span class="star"><i class="${starType} fa-star"></i></span>` : ""}
+        <a href="${story.url}" target="_blank" class="story-link">
           ${story.title}
         </a>
         <small class="story-hostname">(${hostName})</small>
@@ -46,6 +55,62 @@ function putStoriesOnPage() {
   for (let story of storyList.stories) {
     const $story = generateStoryMarkup(story);
     $allStoriesList.append($story);
+  }
+
+  $allStoriesList.show();
+}
+
+async function submitNewStory(evt) {
+  console.debug("submitNewStory");
+  evt.preventDefault();
+
+  const newStoryData = {
+    title: $storyTitle.val().trim(),
+    author: $storyAuthor.val().trim(),
+    url: $storyUrl.val().trim(),
+  };
+
+  const story = await storyList.addStory(currentUser, newStoryData);
+
+  const $storyMarkup = generateStoryMarkup(story);
+  $allStoriesList.prepend($storyMarkup);
+
+  $storyForm.trigger("reset");
+  $storyForm.hide();
+  $allStoriesList.show();
+}
+$storyForm.on("submit", submitNewStory);
+$allStoriesList.on("click", ".star", toggleFavorite);
+
+async function toggleFavorite(evt) {
+  evt.preventDefault();
+  if (!currentUser) return;
+
+  const $li = $(evt.target).closest("li");
+  const storyId = $li.attr("id");
+
+  const $icon = $(evt.target).closest(".star").find("i");
+  const story = storyList.stories.find(s => s.storyId === storyId);
+
+  if (currentUser.isFavorite(story)) {
+    await currentUser.removeFavorite(story);
+    $icon.removeClass("fas").addClass("far");
+  } else {
+    await currentUser.addFavorite(story);
+    $icon.removeClass("far").addClass("fas");
+  }
+}
+
+function putFavoritesListOnPage() {
+  console.debug("putFavoritesListOnPage");
+  $allStoriesList.empty();
+
+  if (!currentUser || currentUser.favorites.length === 0) {
+    $allStoriesList.append("<li>No favorites yet!</li>");
+  } else {
+    for (let story of currentUser.favorites) {
+      $allStoriesList.append(generateStoryMarkup(story));
+    }
   }
 
   $allStoriesList.show();

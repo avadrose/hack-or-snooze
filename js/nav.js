@@ -29,8 +29,26 @@ $navLogin.on("click", navLoginClick);
 
 function updateNavOnLogin() {
   console.debug("updateNavOnLogin");
-  $(".main-nav-links").show();
   $navLogin.hide();
-  $navLogOut.show();
+  $navLogOut.removeClass("hidden");
   $navUserProfile.text(`${currentUser.username}`).show();
+  $navSubmit.removeClass("hidden");
+  $navFavorites.removeClass("hidden");
+
 }
+
+function navSubmitClick(evt) {
+  console.debug("navSubmitClick", evt);
+  hidePageComponents();
+  $storyForm.removeClass("hidden").show();
+}
+
+$body.on("click", "#nav-submit", navSubmitClick);
+
+function navFavoritesClick(evt) {
+  console.debug("navFavoritesClick", evt);
+  hidePageComponents();
+  putFavoritesListOnPage();
+}
+
+$body.on("click", "#nav-favorites", navFavoritesClick);
