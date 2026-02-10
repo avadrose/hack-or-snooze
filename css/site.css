@@ -4,7 +4,7 @@ body {
   font-family: Arimo, sans-serif;
   margin: 8px 7.5vw;
   height: 100vh;
-  background-image: radial-gradient(circle, rgb(248, 197, 206) 0%, rgb(114, 199, 238) 100%);
+  background-image: radial-gradient(circle, rgb(255, 185, 198) 0%, rgb(114, 199, 238) 100%);
 }
 
 h1 {
