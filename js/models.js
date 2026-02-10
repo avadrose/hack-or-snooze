@@ -1,6 +1,7 @@
 "use strict";
 
-const BASE_URL = "https://hack-or-snooze.herokuapp.com";
+const BASE_URL = "https://hack-or-snooze-api.onrender.com";
+;
 ;
 
 /******************************************************************************
