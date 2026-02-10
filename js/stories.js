@@ -26,13 +26,14 @@ async function getAndShowStoriesOnStart() {
 function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
   const showStar = Boolean(currentUser);
+  const showTrash = currentUser && story.username === currentUser.username;
   const isFav = currentUser && currentUser.isFavorite(story);
   const starType = isFav ? "fas" : "far";
-
 
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
+        ${showTrash ? ` <span class="trash-can"><i class="fas fa-trash-alt"></i></span>` : ""}
         ${showStar ? `<span class="star"><i class="${starType} fa-star"></i></span>` : ""}
         <a href="${story.url}" target="_blank" class="story-link">
           ${story.title}
@@ -101,6 +102,27 @@ async function toggleFavorite(evt) {
   }
 }
 
+async function deleteStory(evt) {
+  evt.preventDefault();
+  if (!currentUser) return;
+
+  const $li = $(evt.target).closest("li");
+  const storyId = $li.attr("id");
+
+  console.log("Deleting story: ", storyId);
+
+  try {
+    await storyList.removeStory(currentUser, storyId);
+    $li.remove();
+    console.log("Deleted + removed from DOM: ", storyId);
+  } catch (err) {
+    console.error("Delete failed: ", err);
+    alert("Could not delete story");
+  }
+}
+$allStoriesList.on("click", ".trash-can", deleteStory);
+
+
 function putFavoritesListOnPage() {
   console.debug("putFavoritesListOnPage");
   $allStoriesList.empty();
@@ -115,3 +137,5 @@ function putFavoritesListOnPage() {
 
   $allStoriesList.show();
 }
+
+
