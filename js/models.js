@@ -47,13 +47,14 @@ class StoryList {
    *  - returns the StoryList instance.
    */
 
-  static async getStories() {
+  
     // Note presence of `static` keyword: this indicates that getStories is
     //  **not** an instance method. Rather, it is a method that is called on the
     //  class directly. Why doesn't it make sense for getStories to be an
     //  instance method?
 
     // query the /stories endpoint (no auth required)
+  static async getStories() {
     const response = await axios({
       url: `${BASE_URL}/stories`,
       method: "GET",
@@ -88,6 +89,17 @@ class StoryList {
     user.ownStories.unshift(story);
     return story;
   } 
+
+  async removeStory(user, storyId) {
+    await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: "DELETE",
+      data: { token: user.loginToken },
+    });
+    this.stories = this.stories.filter(s => s.storyId !== storyId);
+    user.ownStories = user.ownStories.filter(s => s.storyId !== storyId);
+    user.favorites = user.favorites.filter(s => s.storyId !== storyId);
+  }
 }
 
 
