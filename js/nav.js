@@ -8,7 +8,10 @@
 
 function navAllStories(evt) {
   console.debug("navAllStories", evt);
+  evt.preventDefault();
+
   hidePageComponents();
+  $storiesContainer.show();
   putStoriesOnPage();
 }
 
@@ -18,9 +21,12 @@ $body.on("click", "#nav-all", navAllStories);
 
 function navLoginClick(evt) {
   console.debug("navLoginClick", evt);
+  evt.preventDefault();
+
   hidePageComponents();
-  $loginForm.show();
-  $signupForm.show();
+  $accountFormsContainer.show();
+  $loginForm.removeClass("hidden").show();
+  $signupForm.removeClass("hidden").show();
 }
 
 $navLogin.on("click", navLoginClick);
@@ -44,12 +50,12 @@ function navSubmitClick(evt) {
   $storyForm.removeClass("hidden").show();
 }
 
-$body.on("click", "#nav-submit", navSubmitClick);
-
 function navFavoritesClick(evt) {
   console.debug("navFavoritesClick", evt);
   evt.preventDefault();
+
   hidePageComponents();
+  $storiesContainer.show();
   putFavoritesListOnPage();
 }
 
