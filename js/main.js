@@ -2,13 +2,13 @@
 
 // So we don't have to keep re-finding things on page, find DOM elements once:
 
-const $body = $("body");
+const $body = $("body"); // stores jQuery reference to body, prevents repeat
 
-const $storiesLoadingMsg = $("#stories-loading-msg");
-const $allStoriesList = $("#all-stories-list");
+const $storiesLoadingMsg = $("#stories-loading-msg"); // refers to loading div, removed after stories load
+const $allStoriesList = $("#all-stories-list"); // refers to ol where stories are rendered
 
-const $storiesContainer = $(".stories-container");
-const $accountFormsContainer = $(".account-forms-container");
+const $storiesContainer = $(".stories-container"); // refers to stories section, used to hide or show main view
+const $accountFormsContainer = $(".account-forms-container"); // wraps login forms and shown when user clicks
 
 const $loginForm = $("#login-form");
 const $signupForm = $("#signup-form");
@@ -31,13 +31,13 @@ const $navFavorites = $("#nav-favorites");
  * calling this, individual components can re-show just what they want.
  */
 
-function hidePageComponents() {
+function hidePageComponents() { // creates an array of page sections 
   const components = [
     $storiesContainer,
     $accountFormsContainer,
     $storyForm,
   ];
-  components.forEach(c => c.hide());
+  components.forEach(c => c.hide()); // calls hide on each 
 }
 
 /** Overall function to kick off the app. */

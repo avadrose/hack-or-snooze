@@ -6,16 +6,16 @@
 
 /** Show main list of all stories when click site name */
 
-function navAllStories(evt) {
-  console.debug("navAllStories", evt);
-  evt.preventDefault();
+function navAllStories(evt) { // this handler runs when user clicks the site name
+  console.debug("navAllStories", evt); // helpful trace during development
+  evt.preventDefault(); // stops href link form jumping to top of page
 
-  hidePageComponents();
-  $storiesContainer.show();
-  putStoriesOnPage();
+  hidePageComponents(); // resets UI and hides major sections
+  $storiesContainer.show(); // show stories container again
+  putStoriesOnPage(); // rerender stories list
 }
 
-$body.on("click", "#nav-all", navAllStories);
+$body.on("click", "#nav-all", navAllStories); // listens for clicks on nav-all
 
 /** Show login/signup on click on "login" */
 
@@ -29,35 +29,35 @@ function navLoginClick(evt) {
   $signupForm.removeClass("hidden").show();
 }
 
-$navLogin.on("click", navLoginClick);
+$navLogin.on("click", navLoginClick); // direct binding to the login link element
 
 /** When a user first logins in, update the navbar to reflect that. */
 
 function updateNavOnLogin() {
   console.debug("updateNavOnLogin");
-  $navLogin.hide();
-  $navLogOut.removeClass("hidden");
-  $navUserProfile.text(`${currentUser.username}`).show();
-  $navSubmit.removeClass("hidden");
+  $navLogin.hide(); // hide login link after successful login
+  $navLogOut.removeClass("hidden"); // makes logout visible by removing hidden class
+  $navUserProfile.text(`${currentUser.username}`).show(); // displays username in navbar
+  $navSubmit.removeClass("hidden"); // shows submit and favorites link for logged in users
   $navFavorites.removeClass("hidden");
 
 }
 
-function navSubmitClick(evt) {
+function navSubmitClick(evt) { // resets UI and shows submit story form
   console.debug("navSubmitClick", evt);
   evt.preventDefault();
   hidePageComponents();
-  $storyForm.removeClass("hidden").show();
+  $storyForm.removeClass("hidden").show(); // correctly removes the hidden class
 }
 
-function navFavoritesClick(evt) {
+function navFavoritesClick(evt) { // resets UI 
   console.debug("navFavoritesClick", evt);
   evt.preventDefault();
 
   hidePageComponents();
-  $storiesContainer.show();
-  putFavoritesListOnPage();
+  $storiesContainer.show(); // shows main stories container
+  putFavoritesListOnPage(); // calls function to render favorites into the list element
 }
 
-$navSubmit.on("click", navSubmitClick);
+$navSubmit.on("click", navSubmitClick); // direct binding on nav elements
 $navFavorites.on("click", navFavoritesClick);
