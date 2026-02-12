@@ -25,6 +25,17 @@ const $storyUrl = $("#story-url");
 const $navSubmit = $("#nav-submit");
 const $navFavorites = $("#nav-favorites");
 
+const $submitForm = $storyForm; 
+const $navSubmitStory = $navSubmit;
+const $navSubmitStoryClick = $navSubmit;
+
+const $ownStories = $("#own-stories-list");
+const $userProfile = $("#user-profile");
+
+function navSubmitClick(evt) {
+  return navSubmitStoryClick(evt);
+}
+
 
 /** To make it easier for individual components to show just themselves, this
  * is a useful function that hides pretty much everything on the page. After
@@ -33,9 +44,11 @@ const $navFavorites = $("#nav-favorites");
 
 function hidePageComponents() {
   const components = [
-    $storiesContainer,
-    $accountFormsContainer,
-    $storyForm,
+    $storiesLists,
+    $submitForm,
+    $loginForm,
+    $signupForm,
+    $userProfile,
   ];
   components.forEach(c => c.hide());
 }
