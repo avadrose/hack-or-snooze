@@ -74,15 +74,14 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  async addStory(user, newStory) {
+  async addStory(user, { title, author, url}) {
+    const token = user.loginToken;
     const response = await axios({
       url: `${BASE_URL}/stories`,
       method: "POST",
-      data: {
-        token: user.loginToken,
-        story: newStory,
-      },
+      data: { token, story: { title, author, url} },
     });
+
     const story = new Story(response.data.story);
 
     this.stories.unshift(story); 
@@ -91,11 +90,11 @@ class StoryList {
   } 
 
   async removeStory(user, storyId) {
-    const url = `${BASE_URL}/stories/${storyId}`;
-    console.log("DELETE URL: ", url);
-
-    await axios.delete(url, {
-      params: { token: user.loginToken },
+    const token = user.loginToken;
+    await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: "DELETE",
+      data: { token },
     });
 
     this.stories = this.stories.filter(s => s.storyId !== storyId);
@@ -163,30 +162,6 @@ class User {
     );
   }
 
-  isFavorite(story) {
-    return this.favorites.some(s => s.storyId === story.storyId);
-  }
-
-  async addFavorite(story) {
-    await axios({
-      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
-      method: "POST",
-      data: { token: this.loginToken },
-    });
-
-    this.favorites.push(story);
-  }
-
-  async removeFavorite(story) {
-    await axios({
-      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
-      method: "DELETE",
-      data: { token: this.loginToken },
-    });
-
-    this.favorites = this.favorites.filter(s => s.storyId !== story.storyId);
-  }
-
 
   /** Login in user with API, make User instance & return it.
 
@@ -244,4 +219,29 @@ class User {
       return null;
     }
   }
+
+  async addFavorite(story) {
+    this.favorites.push(story);
+    await this._addOrRemoveFavorite("add", story);
+  }
+
+  async removeFavorite(story) {
+    this.favorites = this.favorites.filter(s => s.storyId !== story.storyId);
+    await this._addOrRemoveFavorite("remove", story);
+  }
+
+  async _addOrRemoveFavorite(newState, story) {
+    const method = newState === "add" ? "POST" : "DELETE";
+    const token = this.loginToken;
+    await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+      method: method,
+      data: { token },
+    });
+  }
+
+  isFavorite(story) {
+    return this.favorites.some(s => s.storyId === story.storyId);
+  }
+
 }

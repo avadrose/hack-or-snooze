@@ -14,50 +14,59 @@ function navAllStories(evt) {
   $storiesContainer.show();
   putStoriesOnPage();
 }
-
 $body.on("click", "#nav-all", navAllStories);
+
+function navSubmitStoryClick(evt) {
+  console.debug("navSubmitStoryClick", evt);
+  hidePageComponents();
+  $allStoriesList.show();
+  $submitForm.show();
+}
+$navSubmitStory.on("click", navSubmitStoryClick);
 
 /** Show login/signup on click on "login" */
 
+function navFavoritesClick(evt) {
+  console.debug("navFavoritesClick", evt);
+  hidePageComponents();
+  putFavoritesListOnPage();
+}
+$body.on("click", "#nav-favorites", navFavoritesClick);
+
+function navMyStories(evt) {
+  console.debug("navMyStories", evt);
+  hidePageComponents();
+  putUserStoriesOnPage();
+  $ownStories.show();
+}
+$body.on("click", "#nav-my-stories", navMyStories);
+
+
 function navLoginClick(evt) {
   console.debug("navLoginClick", evt);
-  evt.preventDefault();
-
   hidePageComponents();
-  $accountFormsContainer.show();
-  $loginForm.removeClass("hidden").show();
-  $signupForm.removeClass("hidden").show();
+
+  $loginForm.show();
+  $signupForm.show();
+  $storiesContainer.hide();
 }
 
 $navLogin.on("click", navLoginClick);
 
 /** When a user first logins in, update the navbar to reflect that. */
 
+function navProfileClick(evt) {
+  console.debug("navProfileCLick", evt);
+  hidePageComponents();
+  $userProfile.show();
+}
+
+$navUserProfile.on("click", navProfileClick);
+
 function updateNavOnLogin() {
   console.debug("updateNavOnLogin");
+  $(".main-nav-links").css('display', 'flex');
   $navLogin.hide();
-  $navLogOut.removeClass("hidden");
+  $navLogOut.show();
   $navUserProfile.text(`${currentUser.username}`).show();
-  $navSubmit.removeClass("hidden");
-  $navFavorites.removeClass("hidden");
-
 }
-
-function navSubmitClick(evt) {
-  console.debug("navSubmitClick", evt);
-  evt.preventDefault();
-  hidePageComponents();
-  $storyForm.removeClass("hidden").show();
-}
-
-function navFavoritesClick(evt) {
-  console.debug("navFavoritesClick", evt);
-  evt.preventDefault();
-
-  hidePageComponents();
-  $storiesContainer.show();
-  putFavoritesListOnPage();
-}
-
-$navSubmit.on("click", navSubmitClick);
-$navFavorites.on("click", navFavoritesClick);
